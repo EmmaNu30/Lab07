@@ -16,13 +16,23 @@ class Model:
     # --- LIBRI ---
     def get_libri_filtrati(self, biblioteca:str, genere:str):
         """Restituisce la lista di tutti i libri filtrati per biblioteca e/o genere (filtri opzionali)."""
-        # TODO
+        if biblioteca == "Nessun filtro" or not biblioteca:
+            biblio_param = None
+        else:
+            biblio_param = biblioteca
+
+        if genere == "Nessun filtro" or not genere:
+            genere_param = None
+        else:
+            genere_param = genere
+
+        return self._libro_dao.get_libri_filtrati(biblio_param, genere_param)
 
     def get_generi(self):
         """Restituisce la lista di tutti i generi."""
-        # TODO
+        return self._libro_dao.get_generi()
 
     # --- BIBLIOTECHE ---
     def get_biblioteche(self):
         """ Restituisce la lista di tutte le biblioteche."""
-        # TODO
+        return self._biblioteca_dao.get_biblioteche()

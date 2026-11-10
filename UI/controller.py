@@ -18,10 +18,50 @@ class Controller:
         self.genere_selezionato = None
 
     # POPOLA DROPDOWN
-    # TODO
+
+    def popola_dropdowns(self):
+        self._view.dd_biblioteca.options.clear()
+        self._view.dd_genere.options.clear()
+
+        self._view.dd_biblioteca.options.append(ft.dropdown.Option("Nessun filtro"))
+        self._view.dd_genere.options.append(ft.dropdown.Option("Nessun filtro"))
+
+        biblioteche = self._model.get_biblioteche()
+        if biblioteche:
+            for b in biblioteche:
+                self._view.dd_biblioteca.options.append(ft.dropdown.Option(b))
+
+        generi = self._model.get_generi()
+        if generi:
+            for g in generi:
+                self._view.dd_genere.options.append(ft.dropdown.Option(g))
+
+        self._view.update()
+
 
     # CALLBACKS DROPDOWN
-    # TODO
+    def seleziona_biblioteca(self, e):
+        self.biblioteca_selezionata = e.control.value
+
+    def seleziona_genere(self, e):
+        self.genere_selezionato = e.control.value
+
 
     # AZIONE: MOSTRA LIBRI
-    # TODO
+    def handle_mostra_libri(self, e):
+        biblio = self._view.dd_biblioteca.value
+        genere = self._view.dd_genere.value
+
+        libri = self._model.get_libri_filtrati(biblio, genere)
+
+        self._view.lista_libri.controls.clear()
+
+        if not libri:
+            self._view.show_alert("Nessun libro soddisfa i criteri di filtraggio indicati.")
+            self._view.update()
+            return
+
+        for libro in libri:
+            self._view.lista_libri.controls.append(ft.Text(str(libro)))
+
+        self._view.update()
